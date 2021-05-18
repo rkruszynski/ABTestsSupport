@@ -16,6 +16,7 @@ layout = [
     [sg.FileBrowse("Browse", file_types=(("csv", "*.csv"), ("txt", "*.txt")), key='csv', enable_events=True)],
     [sg.Button("Preview", key='-open preview-')],
     [sg.Button('Previous'), sg.Button('Next'), sg.Button('Pege up'), sg.Button('Pege down'), sg.Button('Take screenshot')],
+    [sg.Text(size=(100,1), key='refid')],
     [sg.Text('Your xpath go here:')],
     [sg.InputText(key='-xpath-')],
     [sg.Button('Scroll'), sg.Text(size=(25, 1), key='-OUTPUT-')],
@@ -68,6 +69,7 @@ while True:
 
     if event == 'Next':
         try:
+            window['refid'].update(refid_list[url_index])
             driver.get(url_list[url_index])
             url_index += 1
         except NameError:
@@ -77,6 +79,7 @@ while True:
 
     if event == 'Previous':
         try:
+            window['refid'].update(refid_list[url_index])
             driver.get(url_list[url_index])
             url_index -= 1
         except NameError:
@@ -116,5 +119,9 @@ while True:
     if event == 'csv':
         with open(values['csv'], 'r') as f:
             reader = csv.reader(f)
-            url_list = [column[0] for column in reader]
+            refid_list = []
+            url_list = []
+            for column in reader:
+                refid_list.append(column[0])
+                url_list.append(column[1])
             url_index = 0
