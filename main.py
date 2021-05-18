@@ -15,7 +15,7 @@ logfile_name = ''
 layout = [
     [sg.FileBrowse("Browse", file_types=(("csv", "*.csv"), ("txt", "*.txt")), key='csv', enable_events=True)],
     [sg.Button("Preview", key='-open preview-')],
-    [sg.Button('Previous'), sg.Button('Next'), sg.Button('Pege up'), sg.Button('Pege down'), sg.Button('Take screenshot')],
+    [sg.Button('Previous'), sg.Button('Next'), sg.Button('+10'), sg.Button('+100'), sg.Button('+1000'), sg.Button('Take screenshot')],
     [sg.Text(size=(100,1), key='refid')],
     [sg.Text('Your xpath go here:')],
     [sg.InputText(key='-xpath-')],
@@ -55,17 +55,9 @@ while True:
         window.close()
         break
 
-    if event == 'Page up':
-        # This doesn't work, no idea why
-        body = driver.find_element_by_css_selector('body')
-        body.click()
-        body.send_keys(Keys.PAGE_UP)
-
-    if event == 'Page down':
-        # This doesn't work, no idea why
-        body = driver.find_element_by_css_selector('body')
-        body.click()
-        body.send_keys(Keys.PAGE_DOWN)
+    if event in ('+10', '+100', '+1000'):
+        power = ['+10', '+100', '+1000'].index(event) + 1
+        url_index += 10**power
 
     if event == 'Next':
         try:
